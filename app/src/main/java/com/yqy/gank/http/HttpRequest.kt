@@ -2,9 +2,9 @@ package com.yqy.gank.http
 
 import com.blankj.utilcode.utils.DeviceUtils
 import com.yqy.gank.App
+import com.yqy.gank.bean.GirlBean
 import com.yqy.gank.bean.Result
 import com.yqy.gank.utils.L
-import com.yqy.gank.utils.SPUtil
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,10 +46,9 @@ object HttpRequest{
             val builder = chain.request().newBuilder()
             val mRequest = chain.request().newBuilder()
                     .header("User-Agent", "android/" +
-                            App.VERSIONNAME + "(" +
+                            App().VERSIONNAME + "(" +
                             DeviceUtils.getSDKVersion() + ";" +
                             DeviceUtils.getModel() + ")")
-                    .header("Cookie", "SSOID=" + SPUtil.getInstance().read("sessionid", ""))
                     //                            .header("Cookie", "JSESSIONID="+ SPUtil.getInstance().read("sessionid",""))
                     .build()
             try {
@@ -64,7 +63,7 @@ object HttpRequest{
                 .client(mOkHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl("baseUrl") //build.gradle 配置的基地址
+                .baseUrl("http://gank.io/api/") //配置的基地址
                 .build()
         mHttpService = mRetrofit?.create(HttpService::class.java)
     }
@@ -86,20 +85,19 @@ object HttpRequest{
     </T> */
     class ResultFunc<T> : Func1<Result<T>, T> {
         override fun call(result: Result<T>): T {
-            if (result.ret !== 200) {
+            if (result.error) {
                 //主动抛异常  会自动进去OnError方法
                 try {
                     val errorJson = JSONObject()
-                    errorJson.put("errorCode", result.ret.toString() + "")
-                    errorJson.put("errorMsg", result.msg)
+                    errorJson.put("errorCode", result.error.toString() + "")
+                    errorJson.put("errorMsg", result.error)
                     throw ApiException(errorJson.toString())
                 } catch (e: JSONException) {
                     e.printStackTrace()
                     throwException("-1", "加载失败")
                 }
-
             }
-            return result.data!!
+            return result.results!!
         }
     }
 
@@ -119,8 +117,13 @@ object HttpRequest{
     /**
      * 普通的获取数据 Object可替换要的类型
      */
+
     fun getResult(subscriber: Subscriber<Any>, params: Map<String, String>) {
         toSubscribe(mHttpService?.getResult(params)?.map(ResultFunc<Any>())!!, subscriber)
+    }
+
+    fun getGirls(subscriber: Subscriber<List<GirlBean>>, params: Map<String, String>) {
+        toSubscribe(mHttpService?.getGirls()?.map(ResultFunc<List<GirlBean>>())!!, subscriber)
     }
 
 }

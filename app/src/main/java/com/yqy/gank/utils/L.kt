@@ -12,7 +12,7 @@ import android.util.Log
     /**
      * 是否展示，在不需要的时候设置为false
      */
-    var isShow = false
+    var isShow = true
     var TAG = "YQY"
 
     /**

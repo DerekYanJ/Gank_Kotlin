@@ -59,8 +59,8 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 处理返回数据
      */
-    fun <T> doData(data: T, id: Int){}
-    fun <T> doData(data: T, id: Int, qid: String){}
+    open fun <T> doData(data: T, id: Int){}
+    open fun <T> doData(data: T, id: Int, qid: String){}
 
     override fun onNext(t: Object, requestId: Int) {
         doData(t,requestId)

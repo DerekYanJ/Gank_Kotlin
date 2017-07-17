@@ -5,7 +5,7 @@ package com.yqy.gank.bean
  * Created by DerekYan on 2017/7/12.
  */
 class Result<T> {
-    var ret: Int = 0
-    var msg: String = ""
-    var data: T? = null
+    var error: Boolean = false
+    var count: Int = 0
+    var results: T? = null
 }

@@ -3,6 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.yqy.gank">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -10,14 +11,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.yqy.gank.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.yqy.gank.LoginActivity">
+        <activity android:name=".LoginActivity">
         </activity>
 
         <!-- Glide 切圆形图片 -->
