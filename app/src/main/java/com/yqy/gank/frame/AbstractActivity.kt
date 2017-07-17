@@ -83,7 +83,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 隐藏软键盘
      */
-    fun hideSoftInput(edittext: EditText){
+    open fun hideSoftInput(edittext: EditText){
         try {
             hideSoftInput(edittext.windowToken)
         } catch (e: Exception) {
@@ -94,7 +94,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 隐藏软键盘
      */
-    fun hideSoftInput(binder: IBinder?){
+    open fun hideSoftInput(binder: IBinder?){
         try {
             val inputMethodManager: InputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -107,7 +107,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 加载圆形图片
      */
-    fun loadCircleImg(url: String, mImageView: ImageView){
+    open fun loadCircleImg(url: String, mImageView: ImageView){
         Glide.with(this).load(url)
                 .placeholder(R.mipmap.ic_launcher)          //加载前图片
                 .error(R.mipmap.ic_launcher)                //加载失败图片
@@ -119,7 +119,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 加载普通图片
      */
-    fun loadImg(url: String, mImageView: ImageView){
+    open fun loadImg(url: String, mImageView: ImageView){
         Glide.with(this).load(url)
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
@@ -130,7 +130,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * Snackbar 根布局下方提示的类似Toast 用户可滑动删除
      */
-    fun showSnackbar(tip: String){
+    open fun showSnackbar(tip: String){
         Snackbar.make(this.window.decorView.findViewById(android.R.id.content),
                 tip,
                 Snackbar.LENGTH_SHORT)
@@ -140,14 +140,14 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * Toast
      */
-    fun showToast(tip: String) {
+    open fun showToast(tip: String) {
         Toast.makeText(this, tip, Toast.LENGTH_SHORT).show()
     }
 
     /**
      * 展示对话框
      */
-    fun showAlertDialog(messageStr: String?, //消息
+    open fun showAlertDialog(messageStr: String?, //消息
                         cancelStr: String,  //关闭提示文字
                         rightStr: String,   //右侧确认提示文字
                         mListener: OnAlertDialogListener){
@@ -165,7 +165,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 加载进度框
      */
-    fun showProgressDialog(messageStr: String?){
+    open fun showProgressDialog(messageStr: String?){
         if(mProgressDialog == null) {
             mProgressDialog = ProgressDialog(this)
             mProgressDialog?.isIndeterminate = true
@@ -178,7 +178,7 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
         mProgressDialog?.show()
     }
 
-    fun dissmissProgressDialog(){
+    open fun dissmissProgressDialog(){
         if(mProgressDialog!!.isShowing)
             mProgressDialog?.dismiss()
     }
@@ -203,8 +203,8 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     /**
      * 倒计时相关
      */
-    var sendMsmCount = 60
-    fun startTimeDown(tv: TextView, sendMsmCount: Int){
+    open var sendMsmCount = 60
+    open fun startTimeDown(tv: TextView, sendMsmCount: Int){
         tv.isEnabled = false
         tv.tag = sendMsmCount
         tv.postDelayed(object : Runnable {

@@ -4,23 +4,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.yqy.gank.http.OnRecyclerViewListener
-import java.util.*
+import com.yqy.gank.utils.L
 
 /**
  * 基本Recycler适配器
  * Created by DerekYan on 2017/7/13.
  */
 
-abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder>(layoutResId: Int, data: List<D>?, listener: OnRecyclerViewListener) : RecyclerView.Adapter<VH>() {
+abstract class BaseRecyclerViewAdapter<D, VH : BaseRecyclerViewAdapter.BaseViewHolder>(layoutResId: Int, data: List<D>) : RecyclerView.Adapter<VH>() {
 
     private var layoutResId: Int = 0 //item资源Id
-    private var data: List<D>? = null //数据集合
-    private var listener: OnRecyclerViewListener? = null
+    private var data: List<D> = data //数据集合
+    open var view: View? = null
 
     init {
-        this.listener = listener
-        this.data = data ?: ArrayList<D>()
         if (layoutResId != 0)
             this.layoutResId = layoutResId
         else
@@ -28,20 +25,17 @@ abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder>(layoutResId: Int,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return BaseViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)) as VH
+        view = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
+        return BaseViewHolder(view!!) as VH
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        bindData(holder, data!![position])
-        holder?.mView?.setOnClickListener(View.OnClickListener { if (listener != null) listener!!.onItemClick(position) })
-        holder?.mView?.setOnLongClickListener(View.OnLongClickListener {
-            if (listener != null) listener!!.onItemLongClick(position)
-            false
-        })
+        bindData(holder, data[position])
     }
 
     override fun getItemCount(): Int {
-        return data!!.size
+        L.e("getItemCount",data.size.toString())
+        return data.size
     }
 
     /**
@@ -51,4 +45,12 @@ abstract class BaseRecyclerViewAdapter<D, VH : BaseViewHolder>(layoutResId: Int,
      * @param data
      */
     protected abstract fun bindData(holder: VH, data: D)
+
+    open class BaseViewHolder : RecyclerView.ViewHolder{
+        open var mView: View? = null
+        constructor(view: View): super(view){
+            mView = view
+        }
+    }
+
 }

@@ -7,9 +7,9 @@ import android.view.View
  *
  * Created by DerekYan on 2017/7/13.
  */
-open class BaseViewHolder(var view: View) : RecyclerView.ViewHolder(view){
+open class BaseViewHolder1 : RecyclerView.ViewHolder{
     var mView: View? = null
-    init {
-        mView = itemView
+    constructor(view: View): super(view){
+        mView = view
     }
 }
