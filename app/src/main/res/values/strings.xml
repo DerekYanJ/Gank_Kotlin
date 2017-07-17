@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BaseFrame_Kotlin</string>
+    <string name="str_progress_msg_load">加载中...</string>
+</resources>

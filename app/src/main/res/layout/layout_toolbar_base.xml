@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/white"
+        app:popupTheme="@style/ActionBarPopupThemeOverlay"
+        android:elevation="2dp"
+        android:theme="@style/ToolBarStyleGray">
+
+        <!--<TextView
+            android:id="@+id/left_toolbar_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="订货平台"
+            android:layout_gravity="left|center"
+            android:textSize="@dimen/text_size_15"
+            android:textColor="@color/white"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/title_textview"
+            android:textColor="@color/font_333"
+            android:maxLines="1"
+            android:visibility="gone"
+            android:textSize="@dimen/activity_center_title_size"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/right_toolbar_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="right|center"
+            android:background="@android:color/transparent"
+            android:textSize="15sp"
+            android:textColor="@color/font_333"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <View style="@style/view_line"/>
+</LinearLayout>

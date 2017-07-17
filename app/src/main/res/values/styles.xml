@@ -1,0 +1,97 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- ToolBar -->
+    <style name="ToolBarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="navigationIcon">@drawable/ic_up</item>
+    </style>
+
+    <style name="ToolBarStyleGray" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="actionMenuTextColor">@color/font_333</item>
+        <item name="navigationIcon">@drawable/ic_back_gray</item>
+    </style>
+
+    <style name="item_left">
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:textColor">@color/font_333</item>
+    </style>
+
+    <style name="item_right">
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:drawablePadding">15dp</item>
+        <item name="android:textColor">@color/font_999</item>
+    </style>
+
+    <style name="edittext_base">
+        <item name="android:layout_height">@dimen/height_base</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColorHint">@color/font_999</item>
+        <item name="android:textColor">@color/font_333</item>
+        <item name="android:paddingLeft">@dimen/view_margin</item>
+        <item name="android:paddingRight">@dimen/view_margin</item>
+    </style>
+
+    <style name="view_margin_all">
+        <item name="android:layout_marginLeft">@dimen/view_margin</item>
+        <item name="android:layout_marginRight">@dimen/view_margin</item>
+        <item name="android:layout_marginTop">@dimen/top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/bottom_margin</item>
+    </style>
+
+    <style name="view_padding_all">
+        <item name="android:paddingLeft">@dimen/view_margin</item>
+        <item name="android:paddingRight">@dimen/view_margin</item>
+        <item name="android:paddingTop">@dimen/top_margin</item>
+        <item name="android:paddingBottom">@dimen/bottom_margin</item>
+    </style>
+
+    <style name="view_margin_left_and_right">
+        <item name="android:layout_marginLeft">@dimen/view_margin</item>
+        <item name="android:layout_marginRight">@dimen/view_margin</item>
+    </style>
+
+    <style name="view_margin_top_and_bottom">
+        <item name="android:layout_marginTop">@dimen/top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/bottom_margin</item>
+    </style>
+
+    <style name="view_padding_left_and_right">
+        <item name="android:paddingLeft">@dimen/view_margin</item>
+        <item name="android:paddingRight">@dimen/view_margin</item>
+    </style>
+
+    <style name="view_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/line</item>
+    </style>
+
+    <style name="view_line_h">
+        <item name="android:layout_width">0.5dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/line</item>
+        <item name="android:layout_marginTop">@dimen/top_margin</item>
+        <item name="android:layout_marginBottom">@dimen/bottom_margin</item>
+    </style>
+
+    <style name="view_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@color/bg_view</item>
+    </style>
+
+</resources>
