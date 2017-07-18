@@ -4,6 +4,7 @@
           package="com.yqy.gank">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -27,6 +28,8 @@
             android:value="GlideModule"
             tools:node="remove"/>
 
+        <activity android:name=".ui.activity.ImageActivity">
+        </activity>
     </application>
 
 </manifest>

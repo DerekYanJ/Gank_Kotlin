@@ -16,4 +16,6 @@ abstract class BaseActivity : AbstractActivity(){
         initData()
         addListener()
     }
+
+
 }

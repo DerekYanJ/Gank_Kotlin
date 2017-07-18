@@ -1,10 +1,10 @@
-package com.yqy.gank.http
+package com.yqy.gank.listener
 
 /**
  *
  * Created by DerekYan on 2017/7/13.
  */
-interface OnRecyclerViewListener {
+open interface OnRecyclerViewListener {
     fun onItemClick(position: Int)
     fun onItemLongClick(position: Int)
 }

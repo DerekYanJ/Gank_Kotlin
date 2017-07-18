@@ -15,4 +15,17 @@ class Test {
                         getString(R.string.str_progress_msg_load)), params)
     }
     */
+
+    inner class B {
+        fun Int.foo(){
+            val a =  this@Test
+            val b = this@B
+            val c = this
+            val c1 = this@foo
+            val funList = lambda@ fun String.(){
+                val d = this
+            }
+        }
+    }
+
 }

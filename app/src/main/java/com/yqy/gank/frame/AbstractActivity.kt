@@ -189,13 +189,17 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(keyCode == KeyEvent.KEYCODE_BACK){
             //拦截系统返回键
-            mOnClickBackListener = getOnBackClickListener()
-            if(mOnClickBackListener != null) {
-                //触发我们自己的返回键监听
-                mOnClickBackListener?.onClickBack()
-                return true
+            try {
+                mOnClickBackListener = getOnBackClickListener()
+                if(mOnClickBackListener != null) {
+                    //触发我们自己的返回键监听
+                    mOnClickBackListener?.onClickBack()
+                    return true
+                }
+                finish()
+            } catch(e: Exception) {
+
             }
-            finish()
         }
         return super.onKeyDown(keyCode, event)
     }
