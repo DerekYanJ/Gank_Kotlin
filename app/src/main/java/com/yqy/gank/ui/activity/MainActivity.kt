@@ -9,12 +9,13 @@ import android.support.v4.util.Pair
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.Toolbar
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.bindView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.MemoryCategory
 import com.yqy.gank.R
 import com.yqy.gank.bean.GirlBean
 import com.yqy.gank.frame.BaseActivity
@@ -28,6 +29,7 @@ import com.yqy.gank.utils.L
 class MainActivity : BaseActivity() , OnRecyclerViewListener,SwipeRefreshLayout.OnRefreshListener{
 
     val collapsingtoolbar: CollapsingToolbarLayout by bindView(R.id.collapsingtoolbar)
+    val toolbar: Toolbar by bindView(R.id.toolbar)
     val swiperefreshlayout: SwipeRefreshLayout by bindView(R.id.swiperefreshlayout)
     val recyclerview: RecyclerView by bindView(R.id.recyclerview)
     var mAdapter: MyRecyclerViewAdapter<MyViewHolder>? = null
@@ -40,9 +42,12 @@ class MainActivity : BaseActivity() , OnRecyclerViewListener,SwipeRefreshLayout.
         collapsingtoolbar.setExpandedTitleColor(Color.WHITE)
         collapsingtoolbar.setCollapsedTitleTextColor(Color.WHITE)
 
+        setSupportActionBar(toolbar)
+
+        Glide.get(this).setMemoryCategory(MemoryCategory.HIGH)
+
         recyclerview.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
 //        recyclerview.addItemDecoration(SpacesItemDecoration(8))
-
         mAdapter = MyRecyclerViewAdapter(R.layout.item_girl,mList)
         recyclerview.adapter = mAdapter
 
@@ -57,7 +62,7 @@ class MainActivity : BaseActivity() , OnRecyclerViewListener,SwipeRefreshLayout.
         req()
     }
 
-    override fun getOnBackClickListener(): OnClickBackListener = null!!
+    override fun getOnBackClickListener(): OnClickBackListener = mOnClickBackListener!!
 
     override fun onClick(v: View?) {
     }
@@ -67,6 +72,23 @@ class MainActivity : BaseActivity() , OnRecyclerViewListener,SwipeRefreshLayout.
         HttpRequest.getGirls(
                 ProgressSubscriber<List<GirlBean>>(this, this, 0,
                         getString(R.string.str_progress_msg_load)), params)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menu_about -> {
+                startActivity(Intent(this@MainActivity,AboutActivity::class.java))
+                return true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     override fun <T> doData(data: T, id: Int) {
@@ -118,7 +140,6 @@ class MainActivity : BaseActivity() , OnRecyclerViewListener,SwipeRefreshLayout.
             loadImg(data.url, holder.imageview!!)
             holder.imageview?.setOnClickListener { mListener.onItemClick(position, holder.imageview!!) }
         }
-
     }
 
     inner class MyViewHolder(view: View) : BaseRecyclerViewAdapter.BaseViewHolder(view) {

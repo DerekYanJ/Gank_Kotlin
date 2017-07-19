@@ -18,7 +18,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.yqy.gank.R
 import com.yqy.gank.http.SubscriberResultListener
 import com.yqy.gank.listener.OnAlertDialogListener
 import com.yqy.gank.listener.OnClickBackListener
@@ -36,7 +35,11 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     var pageNum: Int = 20 //分页 每页数量
     var isLoadMore: Boolean = true //是否可以加载更多
 
-    var mOnClickBackListener: OnClickBackListener? = null
+    var mOnClickBackListener: OnClickBackListener? = object : OnClickBackListener {
+        override fun onClickBack() {
+            finish()
+        }
+    }
 
     /** 预备布局contenView id */
     protected abstract fun preView(): Int
@@ -109,8 +112,8 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
      */
     open fun loadCircleImg(url: String, mImageView: ImageView){
         Glide.with(this).load(url)
-                .placeholder(R.mipmap.ic_launcher)          //加载前图片
-                .error(R.mipmap.ic_launcher)                //加载失败图片
+//                .placeholder(R.mipmap.ic_launcher)          //加载前图片
+//                .error(R.mipmap.ic_launcher)                //加载失败图片
                 .transform(GlideCircleTransform(this))      //切圆形
                 .diskCacheStrategy(DiskCacheStrategy.ALL)   //缓存 全尺寸和适应缓存
                 .into(mImageView)
@@ -121,8 +124,8 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
      */
     open fun loadImg(url: String, mImageView: ImageView){
         Glide.with(this).load(url)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
+//                .placeholder(R.mipmap.ic_launcher)
+//                .error(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mImageView)
     }
