@@ -31,7 +31,12 @@ class ImageActivity : BaseActivity() {
     override fun initData() {
     }
 
-    override fun getOnBackClickListener(): OnClickBackListener = mOnClickBackListener!!
+    override fun getOnBackClickListener(): OnClickBackListener = object : OnClickBackListener {
+        override fun onClickBack() {
+            finish()
+            overridePendingTransition(0, 0)
+        }
+    }
 
     override fun onClick(v: View?) {
     }

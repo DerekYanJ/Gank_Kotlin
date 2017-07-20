@@ -118,6 +118,7 @@ class MainActivity : BaseActivity() , OnRecyclerViewListener,SwipeRefreshLayout.
             ActivityCompat.startActivity(this@MainActivity,
                     Intent(this@MainActivity, ImageActivity::class.java)
                             .putExtra("bean",mList[position]), optionsCompat.toBundle())
+            overridePendingTransition(0, 0)
             //取消过渡时屏幕闪烁
 //            window.exitTransition = null
         }

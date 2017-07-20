@@ -28,7 +28,8 @@
             android:value="GlideModule"
             tools:node="remove"/>
 
-        <activity android:name=".ui.activity.ImageActivity">
+        <activity android:name=".ui.activity.ImageActivity"
+                  android:theme="@style/ViewerTheme">
         </activity>
         <activity android:name=".ui.activity.AboutActivity">
         </activity>
