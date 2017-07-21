@@ -6,12 +6,13 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.yqy.gank.ui.activity.MainActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
-        <android.support.design.widget.CollapsingToolbarLayout
+        <!--<android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsingtoolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,26 +26,33 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll|enterAlways"
+                app:layout_scrollFlags="scroll"
                 app:layout_collapseMode="pin"/>
 
             <View android:layout_width="match_parent"
-                android:layout_height="150dp"
-                />
-        </android.support.design.widget.CollapsingToolbarLayout>
+                android:layout_height="150dp"/>
+        </android.support.design.widget.CollapsingToolbarLayout>-->
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_collapseMode="pin"/>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
+            app:tabIndicatorColor="@color/white" />
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefreshlayout"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

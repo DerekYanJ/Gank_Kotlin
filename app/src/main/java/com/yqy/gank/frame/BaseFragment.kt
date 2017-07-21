@@ -26,6 +26,9 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
     var mContext: Context? = null
     var mView: View? = null
 
+    open var count = 10 //每页的数量
+    open var pageNum: Int = 1 //页数
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater!!.inflate(preView(), container, false)
         return mView
@@ -69,8 +72,8 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
         mSwipeRefreshLayout.post { mSwipeRefreshLayout.isRefreshing = flag }
     }
 
-    fun <T> doData(data: T, id: Int) {}
-    fun <T> doData(data: T, id: Int, qid: String) {}
+    open fun <T> doData(data: T, id: Int) {}
+    open fun <T> doData(data: T, id: Int, qid: String) {}
 
     override fun onNext(t: Object, requestId: Int) {
         doData(t, requestId)
@@ -82,9 +85,9 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
      * *
      * @param msg
      */
-    override fun onError(errorCode: Int, msg: String, requestId: Int) {
-        if (getActivity() != null)
-            (getActivity() as AbstractActivity).onError(errorCode, msg, requestId)
+    open override fun onError(errorCode: Int, msg: String, requestId: Int) {
+        if (activity != null)
+            (activity as AbstractActivity).onError(errorCode, msg, requestId)
     }
 
     /**

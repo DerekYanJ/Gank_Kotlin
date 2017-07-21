@@ -32,7 +32,8 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     var mAlertDialog: AlertDialog.Builder? = null
     var mContext: Context? = null
 
-    var pageNum: Int = 20 //分页 每页数量
+    open var count = 10 //每页的数量
+    open var pageNum: Int = 1 //页数
     var isLoadMore: Boolean = true //是否可以加载更多
 
     var mOnClickBackListener: OnClickBackListener? = object : OnClickBackListener {

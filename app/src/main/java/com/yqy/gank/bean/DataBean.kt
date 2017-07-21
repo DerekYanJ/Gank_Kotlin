@@ -6,7 +6,7 @@ import java.io.Serializable
  *
  * Created by DerekYan on 2017/7/17.
  */
-class GirlBean : Serializable{
+class DataBean : Serializable{
     var _id = ""
     var createdAt = ""
     var desc = ""
@@ -16,4 +16,5 @@ class GirlBean : Serializable{
     var url = ""
     var used = ""
     var who = ""
+    var images: MutableList<String> = ArrayList()
 }

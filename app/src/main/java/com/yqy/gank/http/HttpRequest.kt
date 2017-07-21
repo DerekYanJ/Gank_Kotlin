@@ -2,7 +2,7 @@ package com.yqy.gank.http
 
 import com.blankj.utilcode.utils.DeviceUtils
 import com.yqy.gank.App
-import com.yqy.gank.bean.GirlBean
+import com.yqy.gank.bean.DataBean
 import com.yqy.gank.bean.Result
 import com.yqy.gank.utils.L
 import okhttp3.Interceptor
@@ -122,8 +122,8 @@ object HttpRequest{
         toSubscribe(mHttpService?.getResult(params)?.map(ResultFunc<Any>())!!, subscriber)
     }
 
-    fun getGirls(subscriber: Subscriber<List<GirlBean>>, params: Map<String, String>) {
-        toSubscribe(mHttpService?.getGirls()?.map(ResultFunc<List<GirlBean>>())!!, subscriber)
+    fun getData(subscriber: Subscriber<List<DataBean>>, type: String, count: Int, pageNum: Int) {
+        toSubscribe(mHttpService?.getData(type,count,pageNum)?.map(ResultFunc<List<DataBean>>())!!, subscriber)
     }
 
 }
