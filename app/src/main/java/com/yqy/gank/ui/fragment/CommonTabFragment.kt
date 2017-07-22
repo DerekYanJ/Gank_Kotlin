@@ -6,6 +6,7 @@ import android.net.Uri
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,19 +27,12 @@ import com.yqy.gank.ui.decoration.SpacesItemDecoration
  * 公用tab
  * Created by DerekYan on 2017/7/21.
  */
-class CommonTabFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRefreshListener {
+class CommonTabFragment(val type: String) : BaseFragment() , SwipeRefreshLayout.OnRefreshListener {
 
     val swiperefreshlayout: SwipeRefreshLayout by bindView(R.id.swiperefreshlayout)
     val recyclerview: RecyclerView by bindView(R.id.recyclerview)
     var mAdapter: MyRecyclerViewAdapter<MyViewHolder>? = null
     var mList: MutableList<DataBean> = ArrayList()
-
-    //tab类型
-    var type: String = ""
-
-    init {
-        this.type = type
-    }
 
     override fun preView(): Int = R.layout.fragment_common
 
@@ -136,6 +130,10 @@ class CommonTabFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRe
         override fun bindData(holder: VH, data: DataBean, position: Int) {
             loadImg(data.url, holder.imageview!!)
             holder.title_textview?.text = data.desc
+
+            if(!TextUtils.isEmpty(data.who)){
+                holder.name_textview?.text = "(by ${data.who})"
+            }
             holder.itemView?.setOnClickListener { mListener.onItemClick(position) }
             if(data.images.size > 0 ){
                 holder.imageview?.visibility = View.VISIBLE
@@ -147,10 +145,12 @@ class CommonTabFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRe
     inner class MyViewHolder(view: View) : BaseRecyclerViewAdapter.BaseViewHolder(view) {
         var imageview: ImageView? = null
         var title_textview: TextView? = null
+        var name_textview: TextView? = null
 
         init {
             imageview = mView?.findViewById(R.id.imageview) as ImageView?
             title_textview = mView?.findViewById(R.id.title_textview) as TextView?
+            name_textview = mView?.findViewById(R.id.name_textview) as TextView?
         }
     }
 }

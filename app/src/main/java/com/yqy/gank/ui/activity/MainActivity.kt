@@ -51,9 +51,14 @@ class MainActivity : BaseActivity(){
         //添加tablayout标题
         titleList.add("福利")
 
-        for (tabName: String in tabs){
+        /*for (tabName: String in tabs){
             fragmentList.add(CommonTabFragment(tabName))
             titleList.add(tabName)
+        }*/
+
+        tabs.map {
+            fragmentList.add(CommonTabFragment(it))
+            titleList.add(it)
         }
 
         //viewpager与tablayout绑定
