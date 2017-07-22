@@ -20,7 +20,6 @@ import com.yqy.gank.frame.BaseRecyclerViewAdapter
 import com.yqy.gank.http.HttpRequest
 import com.yqy.gank.http.ProgressSubscriber
 import com.yqy.gank.ui.activity.ImageActivity
-import com.yqy.gank.utils.L
 
 /**
  * 福利
@@ -44,6 +43,30 @@ class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
 
     override fun addListener() {
         swiperefreshlayout.setOnRefreshListener(this)
+
+        //添加recyclerview滚动监听
+        /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                //如果正在刷新则不做吹
+                if(swiperefreshlayout.isRefreshing)
+                    return
+
+                //是否可以加载跟多
+                if(!isCanLoadMore){
+                    return
+                }
+
+                //是否能向上滚动，false表示已经滚动到底部
+                if(!recyclerview.canScrollVertically(1)){
+                    //当前页数+1 开始加载更多
+                    pageNum++
+                    loadMore()
+                }
+
+            }
+        })*/
     }
 
     override fun initData() {
@@ -54,11 +77,27 @@ class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
     override fun onClick(v: View?) {
     }
 
+    /**
+     * swiperefreshlayout的onRefresh事件
+     */
     override fun onRefresh() {
-        mList = ArrayList()
+        //清除保存的数据
+        mList.clear()
+
+        //开始请求
         req()
     }
 
+    /**
+     * 加载更多
+     */
+    fun loadMore(){
+        req()
+    }
+
+    /**
+     * 请求数据
+     */
     fun req() {
         HttpRequest.getData(
                 ProgressSubscriber<List<DataBean>>(this, mContext, 0,
@@ -69,11 +108,19 @@ class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
         super.doData(data, id)
         swiperefreshlayout.isRefreshing = false
 
-        mList.addAll(data as List<DataBean>)
+        //处理请求结果
+        if(0 == id){
+            val temp: List<DataBean> = data as List<DataBean>
+            mList.addAll(temp)
 
-        recyclerview.adapter.notifyDataSetChanged()
-        L.e("size",mList.size.toString())
+            //返回数据小余每页数量时 设置不能加载更多
+            if(temp.size < count)
+                isCanLoadMore = false
+
+            recyclerview.adapter.notifyDataSetChanged()
+        }
     }
+
     val mListener: MyOnRecyclerViewListener = object : MyOnRecyclerViewListener {
         override fun onItemClick(position: Int, imageview: ImageView) {
             val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,

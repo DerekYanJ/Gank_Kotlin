@@ -26,8 +26,10 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
     var mContext: Context? = null
     var mView: View? = null
 
+    //列表相关
     open var count = 10 //每页的数量
     open var pageNum: Int = 1 //页数
+    open var isCanLoadMore = true //是否可以加载更多
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater!!.inflate(preView(), container, false)

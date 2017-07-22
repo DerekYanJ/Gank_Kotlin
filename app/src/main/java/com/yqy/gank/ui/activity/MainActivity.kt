@@ -16,7 +16,7 @@ import com.yqy.gank.R
 import com.yqy.gank.frame.BaseActivity
 import com.yqy.gank.listener.OnClickBackListener
 import com.yqy.gank.ui.adapter.MyFragmentPagerAdapter
-import com.yqy.gank.ui.fragment.AndroidFragment
+import com.yqy.gank.ui.fragment.CommonTabFragment
 import com.yqy.gank.ui.fragment.GirlsFragment
 
 class MainActivity : BaseActivity(){
@@ -28,6 +28,7 @@ class MainActivity : BaseActivity(){
 
     var fragmentList: MutableList<Fragment> = ArrayList()
     var titleList: MutableList<String> = ArrayList()
+    val tabs = arrayOf("Android","iOS","前端","拓展资源","瞎推荐","App","休息视频")
 
     override fun preView(): Int = R.layout.activity_main
 
@@ -46,13 +47,14 @@ class MainActivity : BaseActivity(){
 
         //添加viewpager子内容
         fragmentList.add(GirlsFragment())
-        fragmentList.add(AndroidFragment("Android"))
-        fragmentList.add(AndroidFragment("iOS"))
 
         //添加tablayout标题
         titleList.add("福利")
-        titleList.add("Android")
-        titleList.add("iOS")
+
+        for (tabName: String in tabs){
+            fragmentList.add(CommonTabFragment(tabName))
+            titleList.add(tabName)
+        }
 
         //viewpager与tablayout绑定
         viewpager.adapter = MyFragmentPagerAdapter(supportFragmentManager,fragmentList,titleList)

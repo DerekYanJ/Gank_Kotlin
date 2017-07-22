@@ -1,9 +1,8 @@
 package com.yqy.gank.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
+import android.net.Uri
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,21 +18,22 @@ import com.yqy.gank.frame.BaseFragment
 import com.yqy.gank.frame.BaseRecyclerViewAdapter
 import com.yqy.gank.http.HttpRequest
 import com.yqy.gank.http.ProgressSubscriber
-import com.yqy.gank.ui.activity.ImageActivity
+import com.yqy.gank.listener.OnRecyclerViewListener
 import com.yqy.gank.ui.decoration.SpacesItemDecoration
-import com.yqy.gank.utils.L
 
+@SuppressLint("ValidFragment")
 /**
- * Android
+ * 公用tab
  * Created by DerekYan on 2017/7/21.
  */
-class AndroidFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRefreshListener {
+class CommonTabFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRefreshListener {
 
     val swiperefreshlayout: SwipeRefreshLayout by bindView(R.id.swiperefreshlayout)
     val recyclerview: RecyclerView by bindView(R.id.recyclerview)
     var mAdapter: MyRecyclerViewAdapter<MyViewHolder>? = null
     var mList: MutableList<DataBean> = ArrayList()
 
+    //tab类型
     var type: String = ""
 
     init {
@@ -46,24 +46,54 @@ class AndroidFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRefr
         swiperefreshlayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         recyclerview.layoutManager = LinearLayoutManager(activity)
         recyclerview.addItemDecoration(SpacesItemDecoration(13))
-        mAdapter = MyRecyclerViewAdapter(R.layout.item_android, mList)
+        mAdapter = MyRecyclerViewAdapter(R.layout.item_common_tab, mList)
         recyclerview.adapter = mAdapter
     }
 
     override fun addListener() {
         swiperefreshlayout.setOnRefreshListener(this)
+
+        /*//添加recyclerview滚动监听
+        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                //如果正在刷新则不处理
+                if(swiperefreshlayout.isRefreshing)
+                    return
+
+                //是否可以加载跟多
+                if(!isCanLoadMore){
+                    return
+                }
+
+                //是否能向上滚动，false表示已经滚动到底部
+                if(!recyclerview.canScrollVertically(1)){
+                    //当前页数+1 开始加载更多
+                    pageNum++
+                    loadMore()
+                }
+            }
+        })*/
     }
 
     override fun initData() {
         swiperefreshlayout.isRefreshing = true
-        req()
+        onRefresh()
     }
 
     override fun onClick(v: View?) {
     }
 
     override fun onRefresh() {
-        mList = ArrayList()
+        mList.clear()
+        req()
+    }
+
+    /**
+     * 加载更多
+     */
+    fun loadMore(){
         req()
     }
 
@@ -77,25 +107,23 @@ class AndroidFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRefr
         super.doData(data, id)
         swiperefreshlayout.isRefreshing = false
 
-        mList.addAll(data as List<DataBean>)
-
-        recyclerview.adapter.notifyDataSetChanged()
-        L.e("size", mList.size.toString())
-    }
-
-    val mListener: MyOnRecyclerViewListener = object : MyOnRecyclerViewListener {
-        override fun onItemClick(position: Int, imageview: ImageView) {
-            val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                    Pair.create(imageview, "imageview"))
-            ActivityCompat.startActivity(activity,
-                    Intent(activity, ImageActivity::class.java)
-                            .putExtra("bean", mList[position]), optionsCompat.toBundle())
-            activity.overridePendingTransition(0, 0)
+        if(0 == id){
+            mList.addAll(data as List<DataBean>)
+            recyclerview.adapter.notifyDataSetChanged()
         }
     }
 
-    interface MyOnRecyclerViewListener {
-        fun onItemClick(position: Int, imageview: ImageView)
+    val mListener: OnRecyclerViewListener = object : OnRecyclerViewListener {
+        override fun onItemClick(position: Int) {
+            val intent = Intent()
+            intent.action = "android.intent.action.VIEW"
+            val content_url = Uri.parse(mList.get(position).url)
+            intent.data = content_url
+            startActivity(intent)
+        }
+
+        override fun onItemLongClick(position: Int) {
+        }
     }
 
     inner class MyRecyclerViewAdapter<VH : MyViewHolder>(layoutResId: Int, data: MutableList<DataBean>) : BaseRecyclerViewAdapter<DataBean, VH>(layoutResId, data) {
@@ -108,10 +136,11 @@ class AndroidFragment(type: String) : BaseFragment() , SwipeRefreshLayout.OnRefr
         override fun bindData(holder: VH, data: DataBean, position: Int) {
             loadImg(data.url, holder.imageview!!)
             holder.title_textview?.text = data.desc
-//            holder.imageview?.setOnClickListener { mListener.onItemClick(position, holder.imageview!!) }
+            holder.itemView?.setOnClickListener { mListener.onItemClick(position) }
             if(data.images.size > 0 ){
+                holder.imageview?.visibility = View.VISIBLE
                 loadImg(data.images[0], holder.imageview!!)
-            }
+            }else holder.imageview?.visibility = View.GONE
         }
     }
 
