@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
@@ -13,6 +12,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.bindView
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.yqy.gank.R
 import com.yqy.gank.bean.DataBean
 import com.yqy.gank.frame.BaseFragment
@@ -25,9 +28,9 @@ import com.yqy.gank.ui.activity.ImageActivity
  * 福利
  * Created by DerekYan on 2017/7/21.
  */
-class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
+class GirlsFragment : BaseFragment() , OnRefreshListener,OnLoadmoreListener{
 
-    val swiperefreshlayout: SwipeRefreshLayout by bindView(R.id.swiperefreshlayout)
+    val refreshLayout: SmartRefreshLayout by bindView(R.id.refreshLayout)
     val recyclerview: RecyclerView by bindView(R.id.recyclerview)
     var mAdapter: MyRecyclerViewAdapter<MyViewHolder>? = null
     var mList: MutableList<DataBean> = ArrayList()
@@ -35,14 +38,14 @@ class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
     override fun preView(): Int = R.layout.fragment_common
 
     override fun initView() {
-        swiperefreshlayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         recyclerview.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         mAdapter = MyRecyclerViewAdapter(R.layout.item_girl,mList)
         recyclerview.adapter = mAdapter
     }
 
     override fun addListener() {
-        swiperefreshlayout.setOnRefreshListener(this)
+        refreshLayout.setOnRefreshListener(this)
+        refreshLayout.setOnLoadmoreListener(this)
 
         //添加recyclerview滚动监听
         /*recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -70,28 +73,31 @@ class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
     }
 
     override fun initData() {
-        swiperefreshlayout.isRefreshing = true
-        req()
+        refreshLayout.autoRefresh()
     }
 
     override fun onClick(v: View?) {
     }
 
     /**
-     * swiperefreshlayout的onRefresh事件
+     * onRefresh事件
      */
-    override fun onRefresh() {
+    override fun onRefresh(refreshlayout: RefreshLayout?) {
         //清除保存的数据
         mList.clear()
+
+        pageNum = 1
 
         //开始请求
         req()
     }
 
+
     /**
      * 加载更多
      */
-    fun loadMore(){
+    override fun onLoadmore(refreshlayout: RefreshLayout?) {
+        pageNum++
         req()
     }
 
@@ -101,12 +107,13 @@ class GirlsFragment : BaseFragment() , SwipeRefreshLayout.OnRefreshListener{
     fun req() {
         HttpRequest.getData(
                 ProgressSubscriber<List<DataBean>>(this, mContext, 0,
-                        getString(R.string.str_progress_msg_load)),"福利",count,pageNum)
+                        getString(R.string.str_progress_msg_load)).setShowDialog(false),"福利",count,pageNum)
     }
 
     override fun <T> doData(data: T, id: Int) {
         super.doData(data, id)
-        swiperefreshlayout.isRefreshing = false
+        if(refreshLayout.isRefreshing) refreshLayout.finishRefresh()
+        else refreshLayout.finishLoadmore()
 
         //处理请求结果
         if(0 == id){

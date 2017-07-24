@@ -3,7 +3,6 @@ package com.yqy.gank.ui.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
@@ -13,6 +12,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.bindView
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.api.RefreshLayout
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener
 import com.yqy.gank.R
 import com.yqy.gank.bean.DataBean
 import com.yqy.gank.frame.BaseFragment
@@ -27,9 +30,9 @@ import com.yqy.gank.ui.decoration.SpacesItemDecoration
  * 公用tab
  * Created by DerekYan on 2017/7/21.
  */
-class CommonTabFragment(val type: String) : BaseFragment() , SwipeRefreshLayout.OnRefreshListener {
+class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, OnLoadmoreListener {
 
-    val swiperefreshlayout: SwipeRefreshLayout by bindView(R.id.swiperefreshlayout)
+    val refreshLayout: SmartRefreshLayout by bindView(R.id.refreshLayout)
     val recyclerview: RecyclerView by bindView(R.id.recyclerview)
     var mAdapter: MyRecyclerViewAdapter<MyViewHolder>? = null
     var mList: MutableList<DataBean> = ArrayList()
@@ -37,7 +40,6 @@ class CommonTabFragment(val type: String) : BaseFragment() , SwipeRefreshLayout.
     override fun preView(): Int = R.layout.fragment_common
 
     override fun initView() {
-        swiperefreshlayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         recyclerview.layoutManager = LinearLayoutManager(activity)
         recyclerview.addItemDecoration(SpacesItemDecoration(13))
         mAdapter = MyRecyclerViewAdapter(R.layout.item_common_tab, mList)
@@ -45,7 +47,8 @@ class CommonTabFragment(val type: String) : BaseFragment() , SwipeRefreshLayout.
     }
 
     override fun addListener() {
-        swiperefreshlayout.setOnRefreshListener(this)
+        refreshLayout.setOnRefreshListener(this)
+        refreshLayout.setOnLoadmoreListener(this)
 
         /*//添加recyclerview滚动监听
         recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -72,34 +75,45 @@ class CommonTabFragment(val type: String) : BaseFragment() , SwipeRefreshLayout.
     }
 
     override fun initData() {
-        swiperefreshlayout.isRefreshing = true
-        onRefresh()
+        refreshLayout.autoRefresh()
     }
 
     override fun onClick(v: View?) {
     }
 
-    override fun onRefresh() {
+
+    /**
+     * onRefresh事件
+     */
+    override fun onRefresh(refreshlayout: RefreshLayout?) {
+        //清除保存的数据
         mList.clear()
+
+        pageNum = 1
+
+        //开始请求
         req()
     }
+
 
     /**
      * 加载更多
      */
-    fun loadMore(){
+    override fun onLoadmore(refreshlayout: RefreshLayout?) {
+        pageNum++
         req()
     }
 
     fun req() {
         HttpRequest.getData(
                 ProgressSubscriber<List<DataBean>>(this, mContext, 0,
-                        getString(R.string.str_progress_msg_load)), type, count, pageNum)
+                        getString(R.string.str_progress_msg_load)).setShowDialog(false), type, count, pageNum)
     }
 
     override fun <T> doData(data: T, id: Int) {
         super.doData(data, id)
-        swiperefreshlayout.isRefreshing = false
+        if(refreshLayout.isRefreshing) refreshLayout.finishRefresh()
+        else refreshLayout.finishLoadmore()
 
         if(0 == id){
             mList.addAll(data as List<DataBean>)
