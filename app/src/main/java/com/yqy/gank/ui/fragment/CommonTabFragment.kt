@@ -49,29 +49,6 @@ class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, 
     override fun addListener() {
         refreshLayout.setOnRefreshListener(this)
         refreshLayout.setOnLoadmoreListener(this)
-
-        /*//添加recyclerview滚动监听
-        recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                //如果正在刷新则不处理
-                if(swiperefreshlayout.isRefreshing)
-                    return
-
-                //是否可以加载跟多
-                if(!isCanLoadMore){
-                    return
-                }
-
-                //是否能向上滚动，false表示已经滚动到底部
-                if(!recyclerview.canScrollVertically(1)){
-                    //当前页数+1 开始加载更多
-                    pageNum++
-                    loadMore()
-                }
-            }
-        })*/
     }
 
     override fun initData() {
@@ -116,11 +93,13 @@ class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, 
         else refreshLayout.finishLoadmore()
 
         if(0 == id){
+            //获取列表
             mList.addAll(data as List<DataBean>)
             recyclerview.adapter.notifyDataSetChanged()
         }
     }
 
+    //recyclerview监听
     val mListener: OnRecyclerViewListener = object : OnRecyclerViewListener {
         override fun onItemClick(position: Int) {
             val intent = Intent()
@@ -134,6 +113,7 @@ class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, 
         }
     }
 
+    //adapter
     inner class MyRecyclerViewAdapter<VH : MyViewHolder>(layoutResId: Int, data: MutableList<DataBean>) : BaseRecyclerViewAdapter<DataBean, VH>(layoutResId, data) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -146,6 +126,7 @@ class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, 
             holder.title_textview?.text = data.desc
 
             if(!TextUtils.isEmpty(data.who)){
+                //来源不为空则显示
                 holder.name_textview?.text = "(by ${data.who})"
             }
             holder.itemView?.setOnClickListener { mListener.onItemClick(position) }
