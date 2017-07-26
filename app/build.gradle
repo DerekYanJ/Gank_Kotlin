@@ -55,6 +55,8 @@ dependencies {
     //下拉刷新 上拉加载更多
     //https://github.com/scwang90/SmartRefreshLayout
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
 repositories {
     mavenCentral()
@@ -63,3 +65,5 @@ repositories {
     }
 }
 
+
+apply plugin: 'kotlin-android-extensions'
