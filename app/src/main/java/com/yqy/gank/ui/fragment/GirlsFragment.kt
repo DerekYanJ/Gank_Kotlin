@@ -106,8 +106,8 @@ class GirlsFragment : BaseFragment() , OnRefreshListener,OnLoadmoreListener{
      */
     fun req() {
         HttpRequest.getData(
-                ProgressSubscriber<List<DataBean>>(this, mContext, 0,
-                        getString(R.string.str_progress_msg_load)).setShowDialog(false),"福利",count,pageNum)
+                addSubscriber(ProgressSubscriber<List<DataBean>>(this, mContext!!, 0,
+                        getString(R.string.str_progress_msg_load)).setShowDialog(false)),"福利",count,pageNum)
     }
 
     override fun <T> doData(data: T, id: Int) {

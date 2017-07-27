@@ -18,10 +18,13 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.yqy.gank.http.ProgressSubscriber
 import com.yqy.gank.http.SubscriberResultListener
 import com.yqy.gank.listener.OnAlertDialogListener
 import com.yqy.gank.listener.OnClickBackListener
+import com.yqy.gank.utils.L
 import com.yqy.gank.utils.glide.GlideCircleTransform
+import rx.Subscriber
 
 /**
  * acivity基类
@@ -35,6 +38,66 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     open var count = 10 //每页的数量
     open var pageNum: Int = 1 //页数
     var isLoadMore: Boolean = true //是否可以加载更多
+
+    /** 请求的对象的结合 */
+    var mSubscriberMap: MutableMap<Int,Subscriber<Any>>? = HashMap()
+
+    /**
+     * 请求集合
+     */
+    open fun addSubscriber(subscriber: ProgressSubscriber<Any>): Subscriber<Any>{
+        if(mSubscriberMap == null) return subscriber
+        //请求id
+        val requestId = subscriber.requestId
+        if(mSubscriberMap?.containsKey(requestId)!!){
+            if(mSubscriberMap!![requestId]?.isUnsubscribed!!)
+                //如果没有取消订阅 则取消订阅
+                mSubscriberMap!![requestId]?.unsubscribe()
+        }
+        mSubscriberMap?.put(requestId, subscriber)
+        return subscriber
+    }
+
+    /**
+     * 清空subscriber
+     */
+    fun clearSubscriber(){
+        if(mSubscriberMap == null) return
+        try {
+            for ((key, _) in mSubscriberMap!!) {
+                var subscriber: Subscriber<Any> = mSubscriberMap!![key]!!
+                if(subscriber.isUnsubscribed)
+                    //取消订阅
+                    subscriber.unsubscribe()
+            }
+        } catch(e: Exception) {
+            L.e(e.printStackTrace().toString())
+        }
+        //非空 清空
+        if(mSubscriberMap != null) mSubscriberMap?.clear()
+    }
+
+    /**
+     * 请求结束后移除对应Subscriber
+     */
+    fun removeSubscriber(requestId: Int){
+        if(mSubscriberMap == null) return
+        try {
+            if(mSubscriberMap?.containsKey(requestId)!!){
+                if(mSubscriberMap!![requestId]?.isUnsubscribed!!)
+                    //取消订阅
+                    mSubscriberMap!![requestId]?.unsubscribe()
+            }
+        } catch(e: Exception) {
+            L.e(e.printStackTrace().toString())
+        }
+    }
+
+    override fun onDestroy() {
+        //清空
+        clearSubscriber()
+        super.onDestroy()
+    }
 
     var mOnClickBackListener: OnClickBackListener? = object : OnClickBackListener {
         override fun onClickBack() {
@@ -67,10 +130,12 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
     open fun <T> doData(data: T, id: Int, qid: String){}
 
     override fun onNext(t: Object, requestId: Int) {
+        removeSubscriber(requestId)
         doData(t,requestId)
     }
 
     override fun onError(errorCode: Int, msg: String, requestId: Int) {
+        removeSubscriber(requestId)
         if (msg.indexOf("session") != -1 || requestId == 1001) {
             //登录信息超时
             //            Intent intent = new Intent(this,LoginActivity.class);

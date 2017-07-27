@@ -82,9 +82,9 @@ class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, 
     }
 
     fun req() {
-        HttpRequest.getData(
-                ProgressSubscriber<List<DataBean>>(this, mContext, 0,
-                        getString(R.string.str_progress_msg_load)).setShowDialog(false), type, count, pageNum)
+        HttpRequest.getData(addSubscriber(
+                ProgressSubscriber<List<DataBean>>(this, mContext!!, 0,
+                        getString(R.string.str_progress_msg_load)).setShowDialog(false)), type, count, pageNum)
     }
 
     override fun <T> doData(data: T, id: Int) {

@@ -13,14 +13,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import com.yqy.gank.R
+import com.yqy.gank.http.ProgressSubscriber
 import com.yqy.gank.http.SubscriberResultListener
 import com.yqy.gank.listener.OnAlertDialogListener
+import com.yqy.gank.utils.L
+import rx.Subscriber
 
 /**
  *
  * Created by DerekYan on 2017/7/13.
  */
-abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResultListener<Object> {
+abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResultListener<Any> {
     var mProgressDialog: ProgressDialog? = null
     var mAlertDialog: AlertDialog.Builder? = null
     var mContext: Context? = null
@@ -30,6 +33,66 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
     open var count = 10 //每页的数量
     open var pageNum: Int = 1 //页数
     open var isCanLoadMore = true //是否可以加载更多
+
+    /** 请求的对象的结合 */
+    var mSubscriberMap: MutableMap<Int, Subscriber<*>>? = HashMap()
+
+    /**
+     * 请求集合
+     */
+    open fun <T> addSubscriber(subscriber: ProgressSubscriber<T>): Subscriber<T>{
+        if(mSubscriberMap == null) return subscriber
+        //请求id
+        val requestId = subscriber.requestId
+        if(mSubscriberMap?.containsKey(requestId)!!){
+            if(mSubscriberMap!![requestId]?.isUnsubscribed!!)
+            //如果没有取消订阅 则取消订阅
+                mSubscriberMap!![requestId]?.unsubscribe()
+        }
+        mSubscriberMap?.put(requestId, subscriber)
+        return subscriber
+    }
+
+    /**
+     * 清空subscriber
+     */
+    fun clearSubscriber(){
+        if(mSubscriberMap == null) return
+        try {
+            for ((key, _) in mSubscriberMap!!) {
+                var subscriber: Subscriber<*> = mSubscriberMap!![key]!!
+                if(subscriber.isUnsubscribed)
+                //取消订阅
+                    subscriber.unsubscribe()
+            }
+        } catch(e: Exception) {
+            L.e(e.printStackTrace().toString())
+        }
+        //非空 清空
+        if(mSubscriberMap != null) mSubscriberMap?.clear()
+    }
+
+    /**
+     * 请求结束后移除对应Subscriber
+     */
+    fun removeSubscriber(requestId: Int){
+        if(mSubscriberMap == null) return
+        try {
+            if(mSubscriberMap?.containsKey(requestId)!!){
+                if(mSubscriberMap!![requestId]?.isUnsubscribed!!)
+                //取消订阅
+                    mSubscriberMap!![requestId]?.unsubscribe()
+            }
+        } catch(e: Exception) {
+            L.e(e.printStackTrace().toString())
+        }
+    }
+
+    override fun onDestroy() {
+        //清空
+        clearSubscriber()
+        super.onDestroy()
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater!!.inflate(preView(), container, false)
@@ -77,7 +140,8 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
     open fun <T> doData(data: T, id: Int) {}
     open fun <T> doData(data: T, id: Int, qid: String) {}
 
-    override fun onNext(t: Object, requestId: Int) {
+    override fun onNext(t: Any, requestId: Int) {
+        removeSubscriber(requestId)
         doData(t, requestId)
     }
 
@@ -88,6 +152,7 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
      * @param msg
      */
     open override fun onError(errorCode: Int, msg: String, requestId: Int) {
+        removeSubscriber(requestId)
         if (activity != null)
             (activity as AbstractActivity).onError(errorCode, msg, requestId)
     }
@@ -186,10 +251,6 @@ abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResul
         // TODO Auto-generated method stub
         dismissProgressDialog()
         super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
 }
