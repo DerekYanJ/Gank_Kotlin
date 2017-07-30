@@ -2,6 +2,7 @@ package com.yqy.gank.ui.activity
 
 import android.content.Intent
 import android.net.Uri
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
 import butterknife.bindView
@@ -11,6 +12,7 @@ import com.yqy.gank.listener.OnClickBackListener
 
 
 class AboutActivity : BaseActivity() {
+    val toolbar: Toolbar by bindView(R.id.toolbar)
     val github_textview: TextView by bindView(R.id.github_textview)
     val jianshu_textview: TextView by bindView(R.id.jianshu_textview)
 
@@ -20,6 +22,8 @@ class AboutActivity : BaseActivity() {
     }
 
     override fun addListener() {
+        //toolbar 返回键点击监听
+        toolbar.setNavigationOnClickListener { finish() }
         github_textview.setOnClickListener(this)
         jianshu_textview.setOnClickListener(this)
     }

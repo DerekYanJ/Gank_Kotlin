@@ -22,7 +22,7 @@ import com.yqy.gank.frame.BaseRecyclerViewAdapter
 import com.yqy.gank.http.HttpRequest
 import com.yqy.gank.http.ProgressSubscriber
 import com.yqy.gank.listener.OnRecyclerViewListener
-import com.yqy.gank.ui.activity.WebViewActivity
+import com.yqy.gank.ui.activity.DetailActivity
 import com.yqy.gank.ui.decoration.SpacesItemDecoration
 
 @SuppressLint("ValidFragment")
@@ -102,11 +102,8 @@ class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, 
     //recyclerview监听
     val mListener: OnRecyclerViewListener = object : OnRecyclerViewListener {
         override fun onItemClick(position: Int) {
-            val intent = Intent(mContext,WebViewActivity::class.java)
-            intent.putExtra("url",mList.get(position).url)
-            /*intent.action = "android.intent.action.VIEW"
-            val content_url = Uri.parse(mList.get(position).url)
-            intent.data = content_url*/
+            val intent = Intent(mContext, DetailActivity::class.java)
+            intent.putExtra("bean",mList[position])
             startActivity(intent)
         }
 
