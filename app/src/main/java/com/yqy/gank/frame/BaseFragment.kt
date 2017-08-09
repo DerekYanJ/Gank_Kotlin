@@ -23,7 +23,7 @@ import rx.Subscriber
  *
  * Created by DerekYan on 2017/7/13.
  */
-abstract class BaseFragment : Fragment() , View.OnClickListener, SubscriberResultListener<Any> {
+abstract class BaseFragment constructor() : Fragment() , View.OnClickListener, SubscriberResultListener<Any> {
     var mProgressDialog: ProgressDialog? = null
     var mAlertDialog: AlertDialog.Builder? = null
     var mContext: Context? = null

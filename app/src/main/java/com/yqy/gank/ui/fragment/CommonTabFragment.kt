@@ -1,6 +1,5 @@
 package com.yqy.gank.ui.fragment
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -25,17 +24,21 @@ import com.yqy.gank.listener.OnRecyclerViewListener
 import com.yqy.gank.ui.activity.DetailActivity
 import com.yqy.gank.ui.decoration.SpacesItemDecoration
 
-@SuppressLint("ValidFragment")
 /**
  * 公用tab
  * Created by DerekYan on 2017/7/21.
  */
-class CommonTabFragment(val type: String) : BaseFragment() , OnRefreshListener, OnLoadmoreListener {
+class CommonTabFragment constructor(): BaseFragment() , OnRefreshListener, OnLoadmoreListener {
 
     val refreshLayout: SmartRefreshLayout by bindView(R.id.refreshLayout)
     val recyclerview: RecyclerView by bindView(R.id.recyclerview)
     var mAdapter: MyRecyclerViewAdapter<MyViewHolder>? = null
     var mList: MutableList<DataBean> = ArrayList()
+    var type = ""
+
+    constructor(type: String): this(){
+        this.type = type
+    }
 
     override fun preView(): Int = R.layout.fragment_common
 
