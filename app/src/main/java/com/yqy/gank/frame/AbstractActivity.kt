@@ -134,9 +134,14 @@ abstract class AbstractActivity : AppCompatActivity(), View.OnClickListener,Subs
         doData(t,requestId)
     }
 
+    /**
+     * @param errorCode 错误码
+     * @param msg 错误描述
+     * @param requestId 请求id
+     */
     override fun onError(errorCode: Int, msg: String, requestId: Int) {
         removeSubscriber(requestId)
-        if (msg.indexOf("session") != -1 || requestId == 1001) {
+        if (msg.indexOf("session") != -1 || errorCode == 1001) {
             //登录信息超时
             //            Intent intent = new Intent(this,LoginActivity.class);
             //            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
