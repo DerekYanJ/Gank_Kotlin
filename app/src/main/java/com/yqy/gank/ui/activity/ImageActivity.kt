@@ -1,12 +1,13 @@
 package com.yqy.gank.ui.activity
 
+import android.os.Build
 import android.view.View
 import android.widget.ImageView
-import butterknife.bindView
 import com.yqy.gank.R
 import com.yqy.gank.bean.DataBean
 import com.yqy.gank.frame.BaseActivity
 import com.yqy.gank.listener.OnClickBackListener
+import kotterknife.bindView
 
 class ImageActivity : BaseActivity() {
 
@@ -17,7 +18,9 @@ class ImageActivity : BaseActivity() {
     override fun preView(): Int = R.layout.activity_image
 
     override fun initView() {
-        window.enterTransition = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.enterTransition = null
+        }
         back_iamgeview.setOnClickListener { finish() }
 
         mBean = intent.extras.getSerializable("bean") as DataBean

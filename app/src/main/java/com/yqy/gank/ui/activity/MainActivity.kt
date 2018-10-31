@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.MemoryCategory
 import com.yqy.gank.R
@@ -18,6 +17,7 @@ import com.yqy.gank.listener.OnClickBackListener
 import com.yqy.gank.ui.adapter.MyFragmentPagerAdapter
 import com.yqy.gank.ui.fragment.CommonTabFragment
 import com.yqy.gank.ui.fragment.GirlsFragment
+import kotterknife.bindView
 
 class MainActivity : BaseActivity(){
 

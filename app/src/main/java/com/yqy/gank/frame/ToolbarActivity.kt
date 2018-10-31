@@ -62,7 +62,7 @@ abstract class ToolbarActivity : AbstractActivity(){
      */
     protected fun setToolBarRightText(str: String) {
         if (mToolbar != null) {
-            val view = mToolbar?.findViewById(R.id.right_toolbar_view)
+            val view = mToolbar?.findViewById<View>(R.id.right_toolbar_view)
             view?.visibility = View.VISIBLE
             view?.setOnClickListener(this)
             (view as TextView).text = str

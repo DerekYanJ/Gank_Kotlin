@@ -8,10 +8,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
-import butterknife.bindView
 import com.yqy.gank.R
 import com.yqy.gank.frame.BaseActivity
 import com.yqy.gank.listener.OnClickBackListener
+import kotterknife.bindView
 
 class WebViewActivity : BaseActivity() {
     val webview: WebView by bindView(R.id.webview)

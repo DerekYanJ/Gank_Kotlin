@@ -11,26 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
-        <!--<android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsingtoolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="34dp"
-            app:expandedTitleMarginStart="28dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_scrollFlags="scroll"
-                app:layout_collapseMode="pin"/>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="150dp"/>
-        </android.support.design.widget.CollapsingToolbarLayout>-->
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

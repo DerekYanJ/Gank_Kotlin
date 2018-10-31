@@ -6,11 +6,11 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
-import butterknife.bindView
 import com.yqy.gank.R
 import com.yqy.gank.bean.DataBean
 import com.yqy.gank.frame.BaseActivity
 import com.yqy.gank.listener.OnClickBackListener
+import kotterknife.bindView
 
 /**
  * 文章详情

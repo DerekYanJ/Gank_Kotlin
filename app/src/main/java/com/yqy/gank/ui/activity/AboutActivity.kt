@@ -5,10 +5,10 @@ import android.net.Uri
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
-import butterknife.bindView
 import com.yqy.gank.R
 import com.yqy.gank.frame.BaseActivity
 import com.yqy.gank.listener.OnClickBackListener
+import kotterknife.bindView
 
 
 class AboutActivity : BaseActivity() {

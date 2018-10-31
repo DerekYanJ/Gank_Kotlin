@@ -1,5 +1,6 @@
 package com.yqy.gank.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
@@ -23,6 +23,7 @@ import com.yqy.gank.http.ProgressSubscriber
 import com.yqy.gank.listener.OnRecyclerViewListener
 import com.yqy.gank.ui.activity.DetailActivity
 import com.yqy.gank.ui.decoration.SpacesItemDecoration
+import kotterknife.bindView
 
 /**
  * 公用tab
@@ -36,6 +37,7 @@ class CommonTabFragment constructor(): BaseFragment() , OnRefreshListener, OnLoa
     var mList: MutableList<DataBean> = ArrayList()
     var type = ""
 
+    @SuppressLint("ValidFragment")
     constructor(type: String): this(){
         this.type = type
     }

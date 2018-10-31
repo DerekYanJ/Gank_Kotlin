@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener
@@ -23,6 +22,7 @@ import com.yqy.gank.frame.BaseRecyclerViewAdapter
 import com.yqy.gank.http.HttpRequest
 import com.yqy.gank.http.ProgressSubscriber
 import com.yqy.gank.ui.activity.ImageActivity
+import kotterknife.bindView
 
 /**
  * 福利
